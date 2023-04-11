@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "173318881504",
+    "project_id": "consultorio-f975c",
+    "storage_bucket": "consultorio-f975c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:173318881504:android:a8a5adce6f29f64c705085",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "173318881504-gbv7umcvgmmjk1ddcltnesc6bofpfueu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAI1AV1jX0C4odIVFkPwZYBN44rhygYgHw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "173318881504-gbv7umcvgmmjk1ddcltnesc6bofpfueu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+class Mensagem {
+  String message;
+  String senderId;
+  String receiverId;
+  Timestamp timestamp;
+
+  Mensagem(
+      {required this.message,
+      required this.senderId,
+      required this.receiverId,
+      required this.timestamp});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'message': message,
+      'senderId': senderId,
+      'receiverId': receiverId,
+      'timestamp': timestamp,
+    };
+  }
+}
