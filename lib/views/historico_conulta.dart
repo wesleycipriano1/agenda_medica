@@ -15,6 +15,7 @@ class _HistoricoConsultasState extends State<HistoricoConsultas> {
   void initState() {
     super.initState();
     carregarConsultas();
+    //teste
   }
 
   Future<void> carregarConsultas() async {
