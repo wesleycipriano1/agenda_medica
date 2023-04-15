@@ -10,8 +10,6 @@ class AgendamentoConsulta extends StatefulWidget {
 }
 
 class _AgendamentoConsultaState extends State<AgendamentoConsulta> {
-  //List<String> _medicos = [];
-  //List<Medico> listaMedicos = [];
   final TextEditingController _dateController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   final medicoRepository = MedicoRepository();
@@ -26,22 +24,6 @@ class _AgendamentoConsultaState extends State<AgendamentoConsulta> {
   void initState() {
     super.initState();
     _carregarMedicos();
-
-    /*FirebaseFirestore.instance
-        .collection('medicos')
-        .get()
-        .then((querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        final medico = Medico(
-          nome: doc['nome'],
-          crm: doc['crm'],
-          especialidade: doc['especialidade'],
-        );
-        setState(() {
-          medicos.add(medico);
-        });
-      });
-    });*/
   }
 
   String? _selectedMedico;

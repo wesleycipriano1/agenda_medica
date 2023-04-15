@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/repository/medico.dart';
 
@@ -13,6 +14,9 @@ class MedicoRepository {
     for (QueryDocumentSnapshot doc in querySnapshot.docs) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
       medicos.add(Medico(
+          id: data['id'],
+          email: data['email'],
+          senha: data['senha'],
           nome: data['nome'],
           crm: data['crm'],
           especialidade: data['especialidade']));
@@ -23,15 +27,13 @@ class MedicoRepository {
 
   Future<void> salvarMedico(Medico medico, BuildContext context) async {
     try {
-      if (medico.nome == "" || medico.crm == "" || medico.especialidade == "") {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Por favor, preencha todos os campos'),
-          ),
-        );
-        return;
-      }
-      //FirebaseFirestore firestore = FirebaseFirestore.instance;
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: medico.email,
+        password: medico.senha,
+      );
+      medico.id = userCredential
+          .user!.uid; // Atribui o ID gerado pelo Firebase Auth ao objeto Medico
       CollectionReference medicos = _firestore.collection('medicos');
 
       QuerySnapshot querySnapshot = await medicos
@@ -41,7 +43,8 @@ class MedicoRepository {
           .get();
 
       if (querySnapshot.docs.isEmpty) {
-        await medicos.add(medico.toMap());
+        await medicos.doc(medico.id).set(medico
+            .toMap()); // Salva o Medico no Firestore com o ID gerado pelo Firebase Auth
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Médico salvo com sucesso!'),
@@ -63,16 +66,38 @@ class MedicoRepository {
     }
   }
 
-  /*Future<void> salvarMedico(Medico medico, BuildContext context) async {
+  Future<void> _salvarMedico(Medico medico, BuildContext context) async {
     try {
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
-      CollectionReference medicos = firestore.collection('medicos');
-      await medicos.add(medico.toMap());
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Médico salvo com sucesso!'),
-        ),
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: medico.email,
+        password: medico.senha,
       );
+      Map<String, dynamic> medicoData = medico.toMap();
+      medicoData['id'] = userCredential.user!.uid;
+      CollectionReference medicos = _firestore.collection('medicos');
+
+      QuerySnapshot querySnapshot = await medicos
+          .where('crm', isEqualTo: medico.crm)
+          .where('nome', isEqualTo: medico.nome)
+          .where('especialidade', isEqualTo: medico.especialidade)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        await medicos.add(medico.toMap());
+        print(medico.id);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Médico salvo com sucesso!'),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Médico já existe no banco de dados!'),
+          ),
+        );
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -80,5 +105,5 @@ class MedicoRepository {
         ),
       );
     }
-  }*/
+  }
 }

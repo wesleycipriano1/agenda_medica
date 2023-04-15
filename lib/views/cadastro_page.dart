@@ -111,7 +111,7 @@ class _cadastro_pageState extends State<cadastro_page> {
             duration: Duration(seconds: 10),
           ),
         );
-        Timer(Duration(seconds: 10), () {
+        Timer(Duration(seconds: 5), () {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => login()),
           );

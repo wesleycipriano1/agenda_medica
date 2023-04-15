@@ -29,19 +29,3 @@ class Usuario {
         'fotoUrl': foto,
       };
 }
-
-/*class Usuario {
-  String id;
-  final String nome;
-  final String email;
-  final String senha;
-
-  Usuario(
-      {this.id = "",
-      required this.nome,
-      required this.email,
-      required this.senha});
-
-  Map<String, dynamic> toJson() =>
-      {'id': id, 'nome': nome, 'email': email, 'senha': senha};
-}*/

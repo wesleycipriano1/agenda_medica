@@ -5,6 +5,7 @@ import 'package:flutter_application_1/chegar_page.dart';
 import 'package:flutter_application_1/views/agendamento.dart';
 import 'package:flutter_application_1/views/cadastro_medico.dart';
 import 'package:flutter_application_1/views/cadastro_page.dart';
+import 'package:flutter_application_1/views/chat_medicos.dart';
 import 'package:flutter_application_1/views/historico_conulta.dart';
 import 'package:flutter_application_1/views/perfil_user.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Future<void> carregarFotoPerfil() async {
     File? foto = await buscarFoto(_caminhoDaFotoNoStorage);
-    print("este é o caminho" + _caminhoDaFotoNoStorage);
+    print("este é o caminho   --->   " + _caminhoDaFotoNoStorage);
 
     if (foto != null) {
       setState(() {
@@ -218,7 +219,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AgendamentoConsulta()));
+                                builder: (context) => chat_medicos()));
                       },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
