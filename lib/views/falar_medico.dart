@@ -115,7 +115,8 @@ class _falar_medicoState extends State<falar_medico> {
 
   Future<void> carregar_mensagens() async {
     print(_idRecebedor);
-    List<Mensagem> mensagens = await _mensagem_repository.obterMensagens();
+    List<Mensagem> mensagens =
+        await _mensagem_repository.obterMensagens(_idRecebedor!);
 
     setState(() {
       _mensagens = mensagens;
