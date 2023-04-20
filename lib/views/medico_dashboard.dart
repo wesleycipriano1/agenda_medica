@@ -6,6 +6,7 @@ import 'package:flutter_application_1/views/agendamento.dart';
 import 'package:flutter_application_1/views/cadastro_medico.dart';
 import 'package:flutter_application_1/views/cadastro_page.dart';
 import 'package:flutter_application_1/views/chat_medicos.dart';
+import 'package:flutter_application_1/views/chat_pacientes.dart';
 import 'package:flutter_application_1/views/historico_conulta.dart';
 import 'package:flutter_application_1/views/inicio.dart';
 import 'package:flutter_application_1/views/perfil_user.dart';
@@ -89,7 +90,7 @@ class _Dashboard_medicoState extends State<Dashboard_medico> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => chat_medicos()));
+                                builder: (context) => chat_pacientes()));
                       },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,

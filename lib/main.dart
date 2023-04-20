@@ -22,7 +22,7 @@ class myAPP extends StatelessWidget {
       title: 'wesc consultorio',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: Dashboard_medico(),
+      home: inicio_page(),
     );
   }
 }

@@ -63,7 +63,7 @@ class _DashboardPageState extends State<DashboardPage> {
     File? foto = await buscarFoto(_caminhoDaFotoNoStorage);
     print("este é o caminho   --->   " + _caminhoDaFotoNoStorage);
 
-    if (foto != null) {
+    if (foto != null && mounted) {
       setState(() {
         _fotoPerfil = foto;
       });

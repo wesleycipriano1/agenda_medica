@@ -101,6 +101,7 @@ class _cadastro_pageState extends State<cadastro_page> {
           .set({
         'nome': _nomeController.text,
         'email': _emailController.text,
+        'id': userCredential.user!.uid,
       });
       if (userCredential != null) {
         userCredential.user!.updateDisplayName(_nomeController.text);

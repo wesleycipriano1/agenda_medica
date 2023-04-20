@@ -32,8 +32,7 @@ class MedicoRepository {
         email: medico.email,
         password: medico.senha,
       );
-      medico.id = userCredential
-          .user!.uid; // Atribui o ID gerado pelo Firebase Auth ao objeto Medico
+      medico.id = userCredential.user!.uid;
       CollectionReference medicos = _firestore.collection('medicos');
 
       QuerySnapshot querySnapshot = await medicos
@@ -43,8 +42,7 @@ class MedicoRepository {
           .get();
 
       if (querySnapshot.docs.isEmpty) {
-        await medicos.doc(medico.id).set(medico
-            .toMap()); // Salva o Medico no Firestore com o ID gerado pelo Firebase Auth
+        await medicos.doc(medico.id).set(medico.toMap());
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Médico salvo com sucesso!'),

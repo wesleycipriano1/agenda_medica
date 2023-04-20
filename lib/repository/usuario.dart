@@ -18,6 +18,17 @@ class Usuario {
     this.telefone,
     this.foto,
   });
+  factory Usuario.fromMap(Map<String, dynamic> map) {
+    return Usuario(
+      id: map['id'],
+      nome: map['nome'],
+      email: map['email'],
+      senha: map['senha'],
+      endereco: map['endereco'],
+      telefone: map['telefone'],
+      foto: map['foto'],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         'id': id,

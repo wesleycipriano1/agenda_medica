@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_application_1/views/medico_dashboard.dart';
+
+import '../chegar_page.dart';
 
 class login_repository {
-  Future<UserCredential?> signInWithEmailAndPassword(
-      String email, String password) async {
+  Future<UserCredential?> login(
+      String email, String password, BuildContext context) async {
     try {
       final UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
@@ -11,15 +15,20 @@ class login_repository {
       final User? user = userCredential.user;
       final String? uid = user?.uid;
 
-      final DocumentSnapshot<Map<String, dynamic>> snapshot =
-          await FirebaseFirestore.instance.collection('users').doc(uid).get();
-      final data = snapshot.data();
-      if (data != null && data.containsKey('crm') && data['crm'] != null) {
-        // usuário é médico
-        // navegue para a tela de dashboard do médico
+      final DocumentSnapshot<Map<String, dynamic>> medicoSnapshot =
+          await FirebaseFirestore.instance.collection('medicos').doc(uid).get();
+      print("medicoSnapshot: $medicoSnapshot");
+      final medicoData = medicoSnapshot.data();
+      print("medicoData: $medicoData");
+
+      if (medicoData != null) {
+        print('medico');
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => Dashboard_medico()));
       } else {
-        // usuário é paciente
-        // navegue para a tela de dashboard do paciente
+        print('paciente ');
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => chegar_page()));
       }
 
       return userCredential;

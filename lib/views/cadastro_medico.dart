@@ -16,6 +16,7 @@ class _CadastroMedicoState extends State<CadastroMedico> {
   TextEditingController _senhacontole = TextEditingController();
   TextEditingController _emailcontole = TextEditingController();
   MedicoRepository medicorepository = MedicoRepository();
+  bool is_salvo = false;
 
   @override
   Widget build(BuildContext context) {
@@ -83,17 +84,24 @@ class _CadastroMedicoState extends State<CadastroMedico> {
                   },
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    setState(() {
+                      is_salvo = true;
+                    });
                     Medico novoMedico = Medico(
                         nome: _nome.text,
                         crm: _crm.text,
                         especialidade: _especialidade.text,
                         email: _emailcontole.text,
                         senha: _senhacontole.text);
-                    medicorepository.salvarMedico(novoMedico, context);
+                    await medicorepository.salvarMedico(novoMedico, context);
+                    setState(() {
+                      is_salvo = false;
+                    });
                   },
                   child: Text('Salvar'),
                 ),
+                if (is_salvo) CircleAvatar(),
               ],
             ),
           ),

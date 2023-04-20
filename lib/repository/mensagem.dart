@@ -21,4 +21,13 @@ class Mensagem {
       'timestamp': timestamp,
     };
   }
+
+  factory Mensagem.fromJson(Map<String, dynamic> json) {
+    return Mensagem(
+      message: json['message'],
+      receiverId: json['receiverId'],
+      senderId: json['senderId'],
+      timestamp: json['timestamp'],
+    );
+  }
 }

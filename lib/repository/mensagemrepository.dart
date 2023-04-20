@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'mensagem.dart';
 
 class mensagem_repository {
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Future<void> enviarMensagem(String message, String receiverId) async {
     if (message == '') {
       return;
@@ -98,7 +99,7 @@ class mensagem_repository {
     return mensagens;
   }*/
 
-  Future<List<Mensagem>> obterMensagens(String idDestinatario) async {
+  /*Future<List<Mensagem>> obterMensagens(String idDestinatario) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     String senderId = auth.currentUser!.uid;
     QuerySnapshot<Map<String, dynamic>> querySnapshotEnviadas =
@@ -143,5 +144,58 @@ class mensagem_repository {
     mensagens.sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
     return mensagens;
+  }*/
+
+  Stream<List<Mensagem>> obterMensagensStream(String idDestinatario) async* {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    String senderId = auth.currentUser!.uid;
+    Stream<QuerySnapshot<Map<String, dynamic>>> querySnapshotEnviadas =
+        FirebaseFirestore.instance
+            .collection('mensagens')
+            .where('senderId', isEqualTo: senderId)
+            .where('receiverId', isEqualTo: idDestinatario)
+            .orderBy('timestamp', descending: false)
+            .snapshots();
+
+    Stream<QuerySnapshot<Map<String, dynamic>>> querySnapshotRecebidas =
+        FirebaseFirestore.instance
+            .collection('mensagens')
+            .where('receiverId', isEqualTo: senderId)
+            .where('senderId', isEqualTo: idDestinatario)
+            .orderBy('timestamp', descending: false)
+            .snapshots();
+
+    await for (QuerySnapshot<Map<String, dynamic>> snapshotEnviadas
+        in querySnapshotEnviadas) {
+      await for (QuerySnapshot<Map<String, dynamic>> snapshotRecebidas
+          in querySnapshotRecebidas) {
+        List<Mensagem> mensagens = [];
+
+        snapshotEnviadas.docs.forEach((document) {
+          Mensagem mensagem = Mensagem(
+            message: document['message'],
+            senderId: document['senderId'],
+            receiverId: document['receiverId'],
+            timestamp: document['timestamp'],
+          );
+          mensagens.add(mensagem);
+        });
+
+        snapshotRecebidas.docs.forEach((document) {
+          Mensagem mensagem = Mensagem(
+            message: document['message'],
+            senderId: document['senderId'],
+            receiverId: document['receiverId'],
+            timestamp: document['timestamp'],
+          );
+          mensagens.add(mensagem);
+        });
+
+        // Ordena as mensagens pelo timestamp
+        mensagens.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+
+        yield mensagens;
+      }
+    }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/chegar_page.dart';
+import 'package:flutter_application_1/repository/login_repository.dart';
 import 'package:flutter_application_1/views/cadastro_page.dart';
 import 'package:flutter_application_1/views/recuperar_senha.dart';
 
@@ -13,6 +14,7 @@ class _loginState extends State<login> {
   final _emailController = TextEditingController();
   final _senhaContoller = TextEditingController();
   final _firebaseAuth = FirebaseAuth.instance;
+  login_repository _login_repository = login_repository();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,18 +54,15 @@ class _loginState extends State<login> {
                 decoration: InputDecoration(
                   hintText: 'Senha',
                   prefixIcon: Icon(Icons.lock),
-
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: Colors.white, // cor da borda do campo de senha
-                      width: 1.0, // largura da borda do campo de senha
+                      color: Colors.white,
+                      width: 1.0,
                     ),
-                    borderRadius: BorderRadius.circular(
-                        10.0), // borda do campo de senha arredondada
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                   filled: true,
-                  fillColor: Colors.white
-                      .withOpacity(0.7), // cor de fundo do campo de senha
+                  fillColor: Colors.white.withOpacity(0.7),
                 ),
                 obscureText: true,
               ),
@@ -88,7 +87,8 @@ class _loginState extends State<login> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  login();
+                  _login_repository.login(
+                      _emailController.text, _senhaContoller.text, context);
                 },
                 child: Text('Login'),
               ),
