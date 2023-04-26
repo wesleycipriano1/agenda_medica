@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/views/falar_medico.dart';
+import 'package:flutter_application_1/views/falar_pacientess.dart';
 
 import '../repository/usuario.dart';
 import '../repository/usuario_repository.dart';
@@ -42,7 +42,7 @@ class _chat_pacientesState extends State<chat_pacientes> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    falar_medico(id_recebedor: usuario.id)));
+                                    falar_paciente(id_recebedor: usuario.id)));
                       } else {
                         print('não tem id');
                       }

@@ -5,34 +5,70 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/repository/mensagem.dart';
 import 'package:flutter_application_1/repository/mensagemrepository.dart';
 
-class falar_medico extends StatefulWidget {
+class falar_paciente extends StatefulWidget {
   final String id_recebedor;
-  const falar_medico({Key? key, required this.id_recebedor}) : super(key: key);
+  const falar_paciente({Key? key, required this.id_recebedor})
+      : super(key: key);
 
   @override
-  _falar_medicoState createState() => _falar_medicoState();
+  _falar_pacienteState createState() => _falar_pacienteState();
 }
 
-class _falar_medicoState extends State<falar_medico> {
+class _falar_pacienteState extends State<falar_paciente> {
   mensagem_repository _mensagem_repository = mensagem_repository();
   late StreamController<List<Mensagem>> _controller;
   String? _idRecebedor;
   List<Mensagem> messages = [];
+  List<Mensagem> receivedMessages = [];
+  late ScrollController _messagesScrollController = ScrollController();
 
   final TextEditingController _textEditingController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    messages.clear();
     _idRecebedor = widget.id_recebedor;
     _controller = StreamController<List<Mensagem>>();
     _mensagem_repository
         .obterMensagensStream(_idRecebedor!)
         .listen((mensagens) {
       setState(() {
-        messages = mensagens;
+        receivedMessages.clear();
+        receivedMessages = mensagens;
+
+        messages = combineMessages(receivedMessages, messages);
+        _messagesScrollController.animateTo(
+          _messagesScrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 500),
+          curve: Curves.fastOutSlowIn,
+        );
+        WidgetsBinding.instance?.addPostFrameCallback((_) {
+          _messagesScrollController
+              .jumpTo(_messagesScrollController.position.maxScrollExtent);
+        });
       });
     });
+  }
+
+  List<Mensagem> combineMessages(
+    List<Mensagem> newMessages,
+    List<Mensagem> oldMessages,
+  ) {
+    List<Mensagem> combinedMessages = List<Mensagem>.from(oldMessages);
+
+    for (Mensagem message in newMessages) {
+      if (!combinedMessages.any(
+        (oldMessage) =>
+            oldMessage.message == message.message &&
+            oldMessage.receiverId == message.receiverId &&
+            oldMessage.timestamp == message.timestamp,
+      )) {
+        combinedMessages.add(message);
+      }
+    }
+    combinedMessages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+    return combinedMessages;
   }
 
   @override
@@ -45,6 +81,7 @@ class _falar_medicoState extends State<falar_medico> {
         children: <Widget>[
           Expanded(
             child: ListView.builder(
+              controller: _messagesScrollController,
               itemCount: messages.length,
               itemBuilder: (BuildContext context, int index) {
                 final message_ = messages[index];
@@ -78,11 +115,11 @@ class _falar_medicoState extends State<falar_medico> {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            DateFormat('HH:mm')
+                            DateFormat('HH:mm:ss')
                                 .format(message_.timestamp.toDate()),
                             style: TextStyle(
                               color: Color.fromARGB(255, 18, 1, 1),
-                              fontSize: 8,
+                              fontSize: 15,
                             ),
                           ),
                         ],
@@ -115,12 +152,18 @@ class _falar_medicoState extends State<falar_medico> {
                           senderId: '',
                           timestamp: Timestamp.now());
                       setState(() {
-                        messages.add(message);
+                        _messagesScrollController.animateTo(
+                          _messagesScrollController.position.maxScrollExtent,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.fastOutSlowIn,
+                        );
                       });
                       await _mensagem_repository.enviarMensagem(
                           text, _idRecebedor!);
 
                       _textEditingController.clear();
+
+                      messages = combineMessages(receivedMessages, messages);
                     }
                   },
                   icon: const Icon(Icons.send),

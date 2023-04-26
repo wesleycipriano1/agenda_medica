@@ -39,6 +39,7 @@ dependencies:
   firebase_auth: ^4.2.10
   cloud_firestore: ^4.4.4
   get: ^4.6.5
+
   
   
   firebase_storage: ^11.0.16
@@ -92,6 +93,7 @@ flutter:
   - assets/historico.png
   - assets/user.jpg
   - assets/fundo.jpg
+
   
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
